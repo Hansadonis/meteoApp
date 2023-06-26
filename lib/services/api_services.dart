@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:ma_meteo/model/api_response.dart';
 import 'package:ma_meteo/model/geo_position.dart';
 import 'package:ma_meteo/services/api_key_services.dart';
 
@@ -18,11 +19,11 @@ class ApiService{
     return "$baseUrl?$lat$geoLat&$lon$geoLon&$units&$lang&$appid$API";
   }
 
-  Future<Null> callApi(GeoPosition position) async{
+  Future<APIResponse> callApi(GeoPosition position) async{
     final queryString = prepareQuert(position);
     final uri = Uri.parse(queryString);
     final call = await get(uri);
     Map<String, dynamic> map = json.decode(call.body);
-    print(map);
+    return APIResponse.fromJson(map);
   }
 }
