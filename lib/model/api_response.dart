@@ -108,7 +108,7 @@ class Clouds {
 }
 class Wind {
   double speed;
-  int deg;
+  double deg;
   double gust;
 
   Wind(
@@ -118,8 +118,8 @@ class Wind {
       );
 
   Wind.fromJson(Map<String, dynamic> map) :
-      speed = map["speed"],
-      deg = map["deg"],
-      gust = map["gust"];
+      speed = map["speed"].toDouble(),
+      deg = map["deg"].toDouble(),
+      gust = map["gust"].toDouble();
 
 }

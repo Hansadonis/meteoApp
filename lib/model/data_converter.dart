@@ -1,3 +1,6 @@
+import 'package:ma_meteo/model/api_response.dart';
+import 'package:ma_meteo/model/grouped_weather.dart';
+
 class DataConverter{
   List<Map<String, dynamic>> listMappable(List<dynamic> list){
     return list.map((e) => e as Map<String, dynamic>).toList();
@@ -5,6 +8,45 @@ class DataConverter{
 
   String fromIcon(String string){
     return "https://openweathermap.org/img/wn/$string@2x.png";
+  }
+
+  List<GroupedWeather> byDay(APIResponse response){
+    List<GroupedWeather> daily = [];
+    response.list.forEach((forecast) {
+      var date = DateTime.fromMillisecondsSinceEpoch(forecast.dt * 1000);
+      String day = dayFromInt(date.weekday);
+      int hour = date.hour;
+      int min = forecast.main.temp_min.toInt();
+      int max = forecast.main.temp_max.            toInt();
+      String description = forecast.weather.first.description;
+      String icon = forecast.weather.first.icon;
+      final index = daily.indexWhere((d) => d.day == day);
+      if(index == -1){
+        daily.add(GroupedWeather(icon, description, max, min, day));
+      }else{
+        if(daily[index].min > min) daily[index].min = min;
+        if(daily[index].min < max) daily[index].max = max;
+
+        if(hour == 12 || hour == 13 || hour == 14){
+
+          daily[index].description = description;
+          daily[index].icon = icon;
+        }
+      }
+    });
+    return daily;
+  }
+
+  String dayFromInt(int day){
+    switch(day){
+      case 1: return "Lundi";
+      case 2: return "Mardi";
+      case 3: return "Mercredi";
+      case 4: return "Jeudi";
+      case 5: return "Vendredi";
+      case 6: return "Samedi";
+      default: return "Dimanche";
+    }
   }
 
 }

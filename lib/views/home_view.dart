@@ -5,6 +5,7 @@ import 'package:ma_meteo/model/geo_position.dart';
 import 'package:ma_meteo/services/api_services.dart';
 import 'package:ma_meteo/services/location_service.dart';
 import 'package:ma_meteo/views/forecast_view.dart';
+import 'package:ma_meteo/views/no_data_view.dart';
 
 class Homeview extends StatefulWidget {
   const Homeview({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _HomeviewState extends State<Homeview> {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(userPosition?.city ?? "Ma meteo"),
       ),
-      body: ForecastView(response: apiResponse),
+      body: (apiResponse == null) ? NoDataView() : ForecastView(response: apiResponse!),
     );
   }
 

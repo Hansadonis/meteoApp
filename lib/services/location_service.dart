@@ -23,7 +23,6 @@ class LocationService{
     final lon = position.longitude ?? 0.0;
 
     List<geocoding.Placemark> placemarks = await geocoding.placemarkFromCoordinates(lat, lon);
-    print(placemarks);
     final firstChoise = placemarks.first;
     final GeoPosition geoPosition = GeoPosition(
         city: firstChoise.locality ?? "",
