@@ -5,6 +5,7 @@ import 'package:ma_meteo/model/geo_position.dart';
 import 'package:ma_meteo/services/api_services.dart';
 import 'package:ma_meteo/services/location_service.dart';
 import 'package:ma_meteo/views/forecast_view.dart';
+import 'package:ma_meteo/views/my_drawe.dart';
 import 'package:ma_meteo/views/no_data_view.dart';
 
 class Homeview extends StatefulWidget {
@@ -31,6 +32,7 @@ class _HomeviewState extends State<Homeview> {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(userPosition?.city ?? "Ma meteo"),
       ),
+      drawer: MyDrawer(myPosition: userPosition, cities: [], onTap: onTap),
       body: (apiResponse == null) ? NoDataView() : ForecastView(response: apiResponse!),
     );
   }
@@ -47,6 +49,10 @@ class _HomeviewState extends State<Homeview> {
       });
     }
 
+  }
+
+  onTap(String string){
+    Navigator.of(context).pop();
   }
 
 }

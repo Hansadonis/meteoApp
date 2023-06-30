@@ -16,9 +16,8 @@ class ForecastView extends StatelessWidget {
     return Column(
       children: [
         CurrentWeather(forecast: response!.list.first),
-        Expanded(child: ListView.separated(
+        Expanded(child: ListView.builder(
             itemBuilder: ((context, index) => DailyTile(day: byDay[index])),
-            separatorBuilder: ((c, i) => const Divider()),
             itemCount: byDay.length))
       ],
     );
