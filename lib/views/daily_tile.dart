@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma_meteo/model/data_converter.dart';
+import 'package:ma_meteo/services/data_converter.dart';
 import 'package:ma_meteo/model/grouped_weather.dart';
 
 class DailyTile extends StatelessWidget {

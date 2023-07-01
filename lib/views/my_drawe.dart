@@ -6,8 +6,13 @@ class MyDrawer extends StatelessWidget {
   GeoPosition? myPosition;
   List<String> cities;
   Function(String) onTap;
+  Function(String) onDelete;
 
-  MyDrawer({required this.myPosition, required this.cities, required this.onTap});
+  MyDrawer({
+    required this.myPosition,
+    required this.cities,
+    required this.onTap,
+    required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,9 @@ class MyDrawer extends StatelessWidget {
       child: ListView.separated(
           itemBuilder: ((context, index) {
             if(index == 0) return header(context);
-            if(index == 1 && myPosition != null) return tappable(myPosition!.city);
-            if(myPosition == null) return tappable(cities[index - 1]);
-            return tappable(cities[index - 2]);
+            if(index == 1 && myPosition != null) return tappable(myPosition!.city, false);
+            if(myPosition == null) return tappable(cities[index - 1], true);
+            return tappable(cities[index - 2], true);
           }),
           separatorBuilder: ((context, index) => const Divider()),
           itemCount: itemCount
@@ -37,10 +42,16 @@ class MyDrawer extends StatelessWidget {
         ));
   }
 
-  ListTile tappable(String string){
+  ListTile tappable(String string, bool canDelete){
     return ListTile(
       title: Text(string),
       onTap: (() => onTap(string)),
+      trailing: (canDelete)
+     ? IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: (() => onDelete(string)),
+      )
+     : null
     );
   }
 

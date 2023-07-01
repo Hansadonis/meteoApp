@@ -1,4 +1,4 @@
-import 'package:ma_meteo/model/data_converter.dart';
+import 'package:ma_meteo/services/data_converter.dart';
 
 class APIResponse{
 String cod;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ma_meteo/model/api_response.dart';
-import 'package:ma_meteo/model/data_converter.dart';
+import 'package:ma_meteo/services/data_converter.dart';
 import 'package:ma_meteo/model/grouped_weather.dart';
 import 'package:ma_meteo/views/current_weather.dart';
 import 'package:ma_meteo/views/daily_tile.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ma_meteo/model/api_response.dart';
-import 'package:ma_meteo/model/data_converter.dart';
+import 'package:ma_meteo/services/data_converter.dart';
 
 class CurrentWeather extends StatelessWidget {
   CurrentWeather({Key? key, required this.forecast}) : super(key: key);

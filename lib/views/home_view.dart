@@ -3,6 +3,7 @@ import 'package:location/location.dart';
 import 'package:ma_meteo/model/api_response.dart';
 import 'package:ma_meteo/model/geo_position.dart';
 import 'package:ma_meteo/services/api_services.dart';
+import 'package:ma_meteo/services/data_services.dart';
 import 'package:ma_meteo/services/location_service.dart';
 import 'package:ma_meteo/views/add_city_view.dart';
 import 'package:ma_meteo/views/forecast_view.dart';
@@ -18,11 +19,15 @@ class Homeview extends StatefulWidget {
 class _HomeviewState extends State<Homeview> {
 
   GeoPosition? userPosition;
+  GeoPosition? positionToCall;
+
+  List<String> cities = [];
   APIResponse? apiResponse;
 
   @override
   void initState() {
     getUserLocation();
+    updateCities();
     super.initState();
   }
 
@@ -31,9 +36,14 @@ class _HomeviewState extends State<Homeview> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(userPosition?.city ?? "Ma meteo"),
+        title: Text(positionToCall?.city ?? "Ma meteo"),
       ),
-      drawer: MyDrawer(myPosition: userPosition, cities: [], onTap: onTap),
+      drawer: MyDrawer(
+          myPosition: userPosition,
+          cities: cities,
+          onTap: onTap,
+          onDelete: removeCity,
+      ),
       body: Column(
         children: [
           AddCityView(onAddCity: onAddCity),
@@ -47,25 +57,50 @@ class _HomeviewState extends State<Homeview> {
     );
   }
 
+  //Obtenir position via GPS
   getUserLocation() async{
     final loc = await LocationService().getCity();
     if(loc != null){
       setState(() {
         userPosition = loc;
-
+        positionToCall = loc;
       });
-      apiResponse = await ApiService().callApi(userPosition!);
-      setState(() {
-      });
+      callApi();
     }
-
   }
-
-  onTap(String string){
+  //CallApi
+  callApi() async{
+    if(positionToCall == null) return;
+    apiResponse = await ApiService().callApi(positionToCall!);
+    setState(() {
+    });
+  }
+  //Nouvelle ville
+  onTap(String string) async{
+    if(string == userPosition?.city){
+      positionToCall = userPosition;
+      callApi();
+    } else{
+      positionToCall = await LocationService().getCoordsFromCity(string);
+      callApi();
+    }
+    FocusScope.of(context).unfocus();
     Navigator.of(context).pop();
   }
 
-  onAddCity(String){
+  //Ajouter
+  onAddCity(String string){
+    DataServices().addCity(string).then((onSuccess) => updateCities());
+  }
 
+  //Supprimer
+  removeCity(String string) async{
+    DataServices().removeCity(string).then((onSuccess) => updateCities());
+  }
+
+  //Mettre a jour les villes
+  updateCities() async{
+    cities = await DataServices().getCities();
+    setState(() {});
   }
 }
